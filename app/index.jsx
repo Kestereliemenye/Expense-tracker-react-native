@@ -5,12 +5,12 @@ import { useRouter } from "expo-router";
 
 export default function index() {
   // to make the splash page redirect
-  const router = useRouter();
-    useEffect(() => {
-        setTimeout(() => {
-          router.push("./(auth)/welcome")
-      },2000)
-  }, []);
+  // const router = useRouter();
+  //   useEffect(() => {
+  //       setTimeout(() => {
+  //         router.push("./(auth)/welcome")
+  //     },2000)
+  // }, []);
 
   return (
     <View style={styles.container}>

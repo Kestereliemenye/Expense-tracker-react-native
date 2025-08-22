@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Alert, Pressable, StyleSheet, Text, View } from 'react-native'
 import React, { useRef, useState } from 'react'
 import {useRouter} from "expo-router"
 import  ScreenWrapper  from '@/components/ScreenWrapper'
@@ -16,7 +16,15 @@ const Login = () => {
     const [isLoading, setIsLoading] = useState(false)
     const router = useRouter()
     const handleSubmit = async ()=> {
-
+      if (!emailRef.current || !passwordRef.current) {
+        Alert.alert("Login", "Please fill all fields")
+        return;
+      }
+      console.log("email", emailRef.current);
+      console.log("password", passwordRef.current);
+      console.log("good to go");
+      
+      
     }
 
   return (
@@ -70,7 +78,7 @@ const Login = () => {
               {/* {footer} */}
               <View style={styles.footer}>
                   <Typo size={15}>Don`t have an account ?</Typo>
-                  <Pressable onPress={() => router.push("/(auth)/register")}>
+                  <Pressable onPress={() => router.replace("/(auth)/register")}>
                       <Typo fontWeight={"700"} color={colors.primary} size={15}>Sign up</Typo>
                   </Pressable>
               </View>
