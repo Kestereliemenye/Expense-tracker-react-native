@@ -17,7 +17,8 @@ export const AuthProvider = ({ children }) => {
     
     useEffect(() => {
         // to know if user is logged in to change page
-        const unsub = onAuthStateChanged(auth, (firebaseUser) => {
+      const unsub = onAuthStateChanged(auth, (firebaseUser) => {
+          console.log(firebaseUser)
             if (firebaseUser) {
                 // if user is logged in
                 setUser({
@@ -25,6 +26,8 @@ export const AuthProvider = ({ children }) => {
                     email: firebaseUser?.email,
                     name: firebaseUser?.displayName
                 })
+              // to update data in database
+              updateUserData(firebaseUser.uid)
                 router.replace("/(tabs)")
 
             } else {
@@ -45,7 +48,10 @@ export const AuthProvider = ({ children }) => {
       return { succes: true };
     } catch (error) {
       let msg = error.message;
-      return { success: false, msg };
+      console.log("error message: ", msg);
+      if (msg.includes("(auth/invalid-credential)")) msg = "Wrong credentials";
+      if (msg.includes("(auth/invalid-email)")) msg = "Invalid email";
+        return { success: false, msg };
     }
   };
 
@@ -65,10 +71,19 @@ export const AuthProvider = ({ children }) => {
       return { succes: true };
     } catch (error) {
       let msg = error.message;
+      if (msg.includes("(auth/weak-password)"))
+        msg = "Password should be at least 8 characters";
+      if (msg.includes("(auth/email-already-in-use)"))
+        msg = "This email is already in use";
+      if (msg.includes("(auth/weak-password)"))
+        msg = "Password should be at least 8 characters";
+
+      console.log("error message: ", msg);
+
       return { success: false, msg };
     }
   };
-  const updateUserDate = async (uid) => {
+  const updateUserData = async (uid) => {
     try {
       // 1. Create a reference to the user document in Firestore
       const docRef = doc(firestore, "users", uid);
@@ -100,7 +115,7 @@ export const AuthProvider = ({ children }) => {
     setUser,
     login,
     register,
-    updateUserDate,
+    updateUserData,
   };
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
