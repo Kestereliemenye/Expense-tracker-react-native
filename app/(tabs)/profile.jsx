@@ -24,25 +24,25 @@ const Profile = () => {
     {
       title: "Edit Profile",
       icon: <Icons.User size={26} color={colors.white} weight="fill" />,
-      routerName: "/(modals/profileModal)",
+      routeName: "/(modals)/profileModal",
       bgColor: "#6366f1",
     },
     {
       title: "Settings",
       icon: <Icons.GearSix size={26} color={colors.white} weight="fill" />,
-      // routerName: "/(models/profileModel)",
+      // routeName: "/(models/profileModel)",
       bgColor: "#059669",
     },
     {
       title: "Privacy Policy",
       icon: <Icons.Lock size={26} color={colors.white} weight="fill" />,
-      // routerName: "/(models/profileModel)",
+      // routeName: "/(models/profileModel)",
       bgColor: colors.neutral600,
     },
     {
       title: "Logout",
       icon: <Icons.Power size={26} color={colors.white} weight="fill" />,
-      // routerName: "/(models/profileModel)",
+      // routeName: "/(models/profileModel)",
       bgColor: "#e11d48",
     }
   ];
@@ -77,8 +77,8 @@ const Profile = () => {
     if (item.title === "Logout") {
       showLogoutAlert()
     }
-    if (item.routerName) router.push(item.routerName)
-    console.log(item.routerName);
+    if (item.routeName) router.push(item.routeName)
+    console.log(item.routeName);
     
  
   }
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
   },
   nameContainer: {
     gap: verticalScale(4),
-    alignContent: "center",
+    alignItems: "center",
   },
   listIcon: {
     height: verticalScale(44),
