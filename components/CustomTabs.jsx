@@ -1,46 +1,41 @@
 import { View, Platform, TouchableOpacity, StyleSheet } from "react-native";
 import { Text, PlatformPressable } from "@react-navigation/elements";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { colors, spacingX, spacingY} from "@/constants/theme";
+import { colors, spacingX, spacingY } from "@/constants/theme";
 import { verticalScale } from "@/utils/styling";
-import * as Icons from "phosphor-react-native"
-
+import * as Icons from "phosphor-react-native";
 
 export default function CustomTabs({ state, descriptors, navigation }) {
-    const tabbarIcons = {
-        index: (isFocused) => (
-        <Icons.House
-            size={verticalScale(30)}
-            weight={isFocused ? "fill" : "regular"}
-            color={isFocused? colors.primary: colors.neutral400 }
-        />
-        
-        ),
-          statistics: (isFocused) => (
-        <Icons.ChartBar
-            size={verticalScale(30)}
-            weight={isFocused ? "fill" : "regular"}
-            color={isFocused? colors.primary: colors.neutral400 }
-        />
-        
-          ),
-            wallet: (isFocused) => (
-        <Icons.Wallet
-            size={verticalScale(30)}
-            weight={isFocused ? "fill" : "regular"}
-            color={isFocused? colors.primary: colors.neutral400 }
-        />
-        
-            ),
-              profile: (isFocused) => (
-        <Icons.User
-            size={verticalScale(30)}
-            weight={isFocused ? "fill" : "regular"}
-            color={isFocused? colors.primary: colors.neutral400 }
-        />
-        
-              )
-}
+  const tabbarIcons = {
+    index: (isFocused) => (
+      <Icons.House
+        size={verticalScale(30)}
+        weight={isFocused ? "fill" : "regular"}
+        color={isFocused ? colors.primary : colors.neutral400}
+      />
+    ),
+    statistics: (isFocused) => (
+      <Icons.ChartBar
+        size={verticalScale(30)}
+        weight={isFocused ? "fill" : "regular"}
+        color={isFocused ? colors.primary : colors.neutral400}
+      />
+    ),
+    wallet: (isFocused) => (
+      <Icons.Wallet
+        size={verticalScale(30)}
+        weight={isFocused ? "fill" : "regular"}
+        color={isFocused ? colors.primary : colors.neutral400}
+      />
+    ),
+    profile: (isFocused) => (
+      <Icons.User
+        size={verticalScale(30)}
+        weight={isFocused ? "fill" : "regular"}
+        color={isFocused ? colors.primary : colors.neutral400}
+      />
+    ),
+  };
   return (
     <View style={styles.tabar}>
       {state.routes.map((route, index) => {
@@ -84,9 +79,7 @@ export default function CustomTabs({ state, descriptors, navigation }) {
             onLongPress={onLongPress}
             style={styles.tabBarItem}
           >
-                {
-                    tabbarIcons[route.name] && tabbarIcons[route.name](isFocused)
-           }
+            {tabbarIcons[route.name] && tabbarIcons[route.name](isFocused)}
           </TouchableOpacity>
         );
       })}
@@ -95,18 +88,18 @@ export default function CustomTabs({ state, descriptors, navigation }) {
 }
 
 const styles = StyleSheet.create({
-    tabar: {
-        flexDirection: "row",
-        width: "100%",
-        height: Platform.OS == "ios" ? verticalScale(80) : verticalScale(75),
-        backgroundColor: colors.neutral800,
-        justifyContent: "space-around",
-        alignItems: "center",
-        borderTopColor: colors.neutral700
-    },
-    tabBarItem:{
-        marginBottom: Platform.OS == "ios" ? spacingY._30 : spacingY._25,
-        justifyContent: "center",
-        alignItems:"center"
-     }
-})
+  tabar: {
+    flexDirection: "row",
+    width: "100%",
+    height: Platform.OS === "ios" ? verticalScale(80) : verticalScale(110),
+    backgroundColor: colors.neutral800,
+    justifyContent: "space-around",
+    alignItems: "center",
+    borderTopColor: colors.neutral700,
+  },
+  tabBarItem: {
+    marginBottom: Platform.OS === "ios" ? spacingY._30 : spacingY._70,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});

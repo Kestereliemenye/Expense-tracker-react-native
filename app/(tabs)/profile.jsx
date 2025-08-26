@@ -72,13 +72,13 @@ const Profile = () => {
 
   // Handle press function
   const handlePress = (item) => {
-    console.log(`i clicked ${item.title} button`);
+    // console.log(`i clicked ${item.title} button`);
     
     if (item.title === "Logout") {
       showLogoutAlert()
     }
     if (item.routeName) router.push(item.routeName)
-    console.log(item.routeName);
+    // console.log(item.routeName);
     
  
   }
