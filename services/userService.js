@@ -8,7 +8,7 @@ export const updateUser = async (
     updateData
 ) => {
     try {
-        if (updateData.image && updateData?.image?.url) {
+        if (updateData.image && updateData?.image?.uri) {
             const imageUplaodRes = await uploadFileToCloudinary(updateData.image, "users")
             if (!imageUplaodRes.success) {
                 return{success:false, msg: imageUplaodRes.msg || "Failed to uplaod image" }

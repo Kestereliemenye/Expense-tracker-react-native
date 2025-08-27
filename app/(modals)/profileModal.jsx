@@ -57,7 +57,7 @@ const ProfileModal = () => {
       return;
     }
     setLoading(true)
-    console.log("goood to go");
+    // console.log("goood to go");
     const res = await updateUser(user?.uid, userData)
     setLoading(false);
     if (res.success) {

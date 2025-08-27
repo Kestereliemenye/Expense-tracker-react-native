@@ -17,12 +17,12 @@ export const uploadFileToCloudinary = async (
             
         }
         // if file has a url
-        if (file && file.url) {
+        if (file && file.uri) {
             const formData = new FormData();
             formData.append("file", {
-                url: file?.url,
-                type: "images/jpeg",
-                name: file?.url?.split('/').pop() || "file.jpg"
+                uri: file?.uri,
+                type: file.type || "image/jpeg",
+                name: file?.uri?.split("/").pop() || "file.jpg"
             })
             formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET)
             formData.append("folder", folderName)

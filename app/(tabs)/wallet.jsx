@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import ScreenWrapper from "@/components/ScreenWrapper"
 import { colors, spacingX, spacingY, radius } from "@/constants/theme";
@@ -10,9 +10,22 @@ import BackBtn from "@/components/BackBtn";
 import { useAuth } from "../../context/authContext"
 import  * as Icons from "phosphor-react-native"
 import { useRouter } from 'expo-router';
-
+import useFetchedData from '../../hooks/useFetchedData';
+import { orderBy, where } from 'firebase/firestore';
+import Loading from "@/components/Loading"
+import WalletListItem from '../../components/WalletListItem';
 const Wallet = () => {
   const router = useRouter()
+  const { user } = useAuth()
+  
+  const { data: wallets, error, loading } = useFetchedData("wallets", [
+    where("uid", "==", user?.uid),
+    orderBy("created", "desc")// order the wallet by creation date from current to oldest
+  ])
+  console.log("wallets: ", wallets.length)// to check how many wallet
+
+
+
   //func to calculate total balance
   const getTotalBalance = () => {
     return 3450;
@@ -41,7 +54,16 @@ const Wallet = () => {
             </TouchableOpacity>
           </View>
 
-          {/* todo: wallet lists */}
+          {/*  wallet lists */}
+          {loading && <Loading />}
+          <FlatList
+            data={wallets}
+            renderItem={({item, index}) => {
+            return <WalletListItem item={item} index={index} router={router}/>
+            }}
+            contentContainerStyle={styles.listStyle}
+
+          />
         </View>
       </View>
     </ScreenWrapper>
