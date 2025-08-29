@@ -1,26 +1,33 @@
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import Typo from "./Typo";
 import { colors, spacingX, spacingY, radius } from "@/constants/theme";
 import { Image } from "expo-image";
 import { verticalScale } from "@/utils/styling";
-import * as Icons from "phosphor-react-native"
+import * as Icons from "phosphor-react-native";
 
-import Animated,  { FadeInDown } from "react-native-reanimated";
+import Animated, { FadeInDown } from "react-native-reanimated";
 
 const WalletListItem = ({ item, index, router }) => {
+  const openWallet = () => {
+    router.push({
+      pathname: "/(modals)/walletModal",
+      params: {
+        id: item?.id,
+        name: item?.name,
+        image: item?.image?.uri || item?.image,
+      },
+      
+    });
+    
+  };
   return (
     <Animated.View
       entering={FadeInDown.delay(index * 50)
         .springify()
         .damping(13)}
     >
-      <TouchableOpacity style={styles.container}>
+      <TouchableOpacity style={styles.container} onPress={openWallet}>
         <View style={styles.imageContainer}>
           <Image
             style={{ flex: 1 }}
@@ -38,7 +45,8 @@ const WalletListItem = ({ item, index, router }) => {
         <Icons.CaretRight
           size={verticalScale(20)}
           weight="bold"
-        color={colors.white}/>
+          color={colors.white}
+        />
       </TouchableOpacity>
     </Animated.View>
   );

@@ -22,14 +22,16 @@ const Wallet = () => {
     where("uid", "==", user?.uid),
     orderBy("created", "desc")// order the wallet by creation date from current to oldest
   ])
-  console.log("wallets: ", wallets.length)// to check how many wallet
 
 
 
   //func to calculate total balance
-  const getTotalBalance = () => {
-    return 3450;
-  }
+  const getTotalBalance = () => 
+    wallets.reduce((total, item) => {
+      total = total + (item.amount || 0)
+      return total
+    },0)
+  
   return (
     <ScreenWrapper style={{backgroundColor: colors.black}}>
       <View style={styles.container}>
