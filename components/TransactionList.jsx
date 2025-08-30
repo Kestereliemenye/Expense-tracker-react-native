@@ -57,8 +57,8 @@ const TransactionList = ({ data, title, loading, emptyListMessage }) => {
 };
 
 const TransactionItem = ({ item, index, handleClick }) => {
-  let category = incomeCategory;
-  console.log("category: ", category);
+  console.log("item:" , item)
+  let category = expenseCategories["airtime"]
   
   const IconComponent = category.icon;
   return (
@@ -74,12 +74,12 @@ const TransactionItem = ({ item, index, handleClick }) => {
 
         <View style={styles.categoryDes}>
           <Typo size={17}>{category.label}</Typo>
-          <Typo size={12} color={colors.neutral400} textProps={{ numberOfLines: 1 }}>Paid wifi bill</Typo>
+          <Typo size={12} color={colors.neutral400} textProps={{ numberOfLines: 1 }}>Bought some apples</Typo>
         </View>
 
 
         <View style={styles.amountDates}>
-          <Typo fontWeight={"500"} color={colors.rose}>- $23</Typo>
+          <Typo fontWeight={"500"} color={colors.rose}>- $14</Typo>
           <Typo size={13} color={colors.neutral400}> 12 jan</Typo>
         </View>
       </TouchableOpacity>

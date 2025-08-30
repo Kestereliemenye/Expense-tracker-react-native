@@ -13,6 +13,8 @@ const useFetchedData = (collectionName, contraints = []) => {
         if (!collectionName) return;
         const collectionRef = collection(firestore, collectionName)
         const q = query(collectionRef, ...contraints)
+        console.log("Running useFetchedData for:", collectionName, contraints);
+
 
 
         const unsub = onSnapshot(q, (snapshot) => {
@@ -37,6 +39,7 @@ const useFetchedData = (collectionName, contraints = []) => {
     },[])
   return ( {data,loading,error});
 };
+
 
 export default useFetchedData;
 

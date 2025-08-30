@@ -18,12 +18,28 @@ import * as Icons from "phosphor-react-native";
 import HomeCard from "../../components/HomeCard";
 import TransactionList from "../../components/TransactionList";
 import { useRouter } from "expo-router";
+import { limit, orderBy, where } from "firebase/firestore";
+import useFetchedData from "../../hooks/useFetchedData";
 const Home = () => {
   // to push to  modals
 
   const { user } = useAuth();
   const router = useRouter();
+
+  const constraints = [
+    where("uid", "==", user?.uid),
+    limit(30)
+  ]
+    const {
+      data: recentTransactions,
+      error,
+      loading: transactionLoading,
+    } = useFetchedData("transactions", constraints);
+  // console.log(recentTransactions);
+  
+  
   return (
+
     <ScreenWrapper>
       <View style={styles.container}>
         {/* header */}
@@ -55,10 +71,10 @@ const Home = () => {
             <HomeCard />
           </View>
           <TransactionList
+            data={recentTransactions}
             emptyListMessage="No Transactions addd yet"
-            data={[1, 2, 3, 4, 5, 6]}
             title="Recent Transactions"
-            loading={false}
+            loading={transactionLoading}
           />
         </ScrollView>
 

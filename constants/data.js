@@ -67,6 +67,19 @@ export const expenseCategories = {
     icon: Icons.User,
     bgColor: "#a21caf",
   },
+  airtime: {
+    label: "Airtime",
+    value: "airtime",
+    icon: Icons.Phone,
+    bgColor: "#2563eb",
+  },
+  data: {
+    label: "Data",
+    value: "data",
+    icon: Icons.WifiHigh,
+    bgColor: "#0d9488", // teal
+  },
+
   others: {
     label: "Others",
     value: "others",

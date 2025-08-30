@@ -20,7 +20,6 @@ export const createOrUpdateWallet = async (walletData) => {
         };
       }
       walletToSave.image = imageUploadRes.data;
-      console.log(imageUploadRes.data);
     }
 
     //   if new wallet

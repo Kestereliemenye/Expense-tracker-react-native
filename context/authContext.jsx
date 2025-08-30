@@ -18,7 +18,6 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         // to know if user is logged in to change page
       const unsub = onAuthStateChanged(auth, (firebaseUser) => {
-          console.log(firebaseUser)
             if (firebaseUser) {
                 // if user is logged in
                 setUser({
