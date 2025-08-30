@@ -28,6 +28,7 @@ const Home = () => {
 
   const constraints = [
     where("uid", "==", user?.uid),
+    orderBy("date", "desc"),
     limit(30)
   ]
     const {

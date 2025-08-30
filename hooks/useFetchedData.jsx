@@ -13,7 +13,6 @@ const useFetchedData = (collectionName, contraints = []) => {
         if (!collectionName) return;
         const collectionRef = collection(firestore, collectionName)
         const q = query(collectionRef, ...contraints)
-        console.log("Running useFetchedData for:", collectionName, contraints);
 
 
 

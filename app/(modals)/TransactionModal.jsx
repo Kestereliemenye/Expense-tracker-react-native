@@ -58,26 +58,32 @@ const TransactionModal = () => {
     orderBy("created", "desc"), // order the wallet by creation date from current to oldest
   ]);
 
+  // fetch old transction data
   const oldTransaction = useLocalSearchParams();
   // console.log("old wallet", oldTransaction);
 
-  // useEffect(() => {
-  //   // to check is old wallet exists
-  //   if (oldTransaction?.id) {
-  //     setTransaction({
-  //       name: oldTransaction?.name,
-  //       image: oldTransaction?.image,
-  //     });
-  //   }
-  // }, []);
+  useEffect(() => {
+    // to check is old transactiion exists
+    if (oldTransaction?.id) {
+      setTransaction({
+        type: oldTransaction?.type,
+        amount: Number(oldTransaction.amount),
+        description: oldTransaction.description || "",
+        category: oldTransaction.category || "",
+        date: new Date(oldTransaction.date),
+        walletId: oldTransaction.walletId,
+        image: oldTransaction?.image,
+      });
+    }
+  }, []);
 
   const submit = async () => {
-    const {type,amount,description,category,date,walletId,image} = transaction
+    const { type, amount, description, category, date, walletId, image } =
+      transaction;
     if (!walletId || !date || !amount || (type === "expense" && !category)) {
-      Alert.alert("Transaction", "Please fill all the fields")
+      Alert.alert("Transaction", "Please fill all the fields");
       return;
     }
-
 
     let transactionData = {
       type,
@@ -86,21 +92,22 @@ const TransactionModal = () => {
       category,
       walletId,
       image,
-      uid: user?.uid
-    }
+      uid: user?.uid,
+      date: transaction.date || new Date(),
+    };
 
-    // todo include transaction id 
+    if (oldTransaction?.id) transaction.id = oldTransaction.id;
+
+    // todo include transaction id
     setLoading(true);
-    const res = await createOrUpdateTransaction(transactionData)
+    const res = await createOrUpdateTransaction(transactionData);
 
-    setLoading(false)
+    setLoading(false);
     if (res.success) {
-      router.back()
+      router.back();
     } else {
-      Alert.alert("Transaction", res.msg)
+      Alert.alert("Transaction", res.msg);
     }
-    
-    
   };
 
   // on chnage date function
@@ -245,7 +252,7 @@ const TransactionModal = () => {
                 itemTextStyle={styles.dropDownItemText}
                 itemContainerStyle={styles.dropdownItemContainer}
                 containerStyle={styles.dropdownListContainer}
-                placeholder={"Select Wallet"}
+                placeholder={"Select expense"}
               />
             </View>
           )}

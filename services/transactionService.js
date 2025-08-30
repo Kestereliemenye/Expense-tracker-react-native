@@ -17,7 +17,8 @@ export const createOrUpdateTransaction = async (transactionData) => {
     }
     // if data
     if (id) {
-      // todo: upddate existing transaction
+      //  upddate existing transaction
+
     } else {
       //update wallet
       //updateWallet for new transaction
