@@ -17,7 +17,7 @@ export default function index() {
       <Image
         style={styles.logo}
         resizeMode="contain"
-        source={require("../assets/images/splash.png")}
+        source={require("../assets/images/splashImage.png")}
       />
     </View>
   );

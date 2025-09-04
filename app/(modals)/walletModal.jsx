@@ -30,7 +30,6 @@ const WalletModal = () => {
   const router = useRouter();
 
   const oldWallet = useLocalSearchParams();
-  console.log("old wallet", oldWallet);
 
   useEffect(() => {
     // to check is old wallet exists

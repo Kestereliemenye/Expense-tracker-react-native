@@ -30,7 +30,10 @@ import { expenseCategories, transactionTypes } from "../../constants/data";
 import useFetchedData from "../../hooks/useFetchedData";
 import { orderBy, where } from "firebase/firestore";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { createOrUpdateTransaction } from "../../services/transactionService";
+import {
+  createOrUpdateTransaction,
+  deleteTransaction,
+} from "../../services/transactionService";
 
 const TransactionModal = () => {
   const { user } = useAuth();
@@ -91,12 +94,12 @@ const TransactionModal = () => {
       description,
       category,
       walletId,
-      image,
+      image: image ? image : null,
       uid: user?.uid,
       date: transaction.date || new Date(),
     };
 
-    if (oldTransaction?.id) transaction.id = oldTransaction.id;
+    if (oldTransaction?.id) transactionData.id = oldTransaction.id;
 
     // todo include transaction id
     setLoading(true);
@@ -123,13 +126,16 @@ const TransactionModal = () => {
     // console.log("deleing the wallet: ", oldTransaction?.id);
     if (!oldTransaction?.id) return;
     setLoading(true);
-    const res = await deletewallet(oldTransaction?.id);
+    const res = await deleteTransaction(
+      oldTransaction?.id,
+      oldTransaction?.walletId
+    );
     setLoading(false);
 
     if (res.success) {
       router.back();
     } else {
-      Alert.alert("wallet", res.msg);
+      Alert.alert("Transaction", res.msg);
     }
   };
 
@@ -137,7 +143,7 @@ const TransactionModal = () => {
   const showDeleteAlert = () => {
     Alert.alert(
       "Confirm",
-      "Are you sure you want to do this? \n This action will remove all transaction related to this wallet",
+      "Are you sure you want to delete this transaction",
       // options
       [
         {
@@ -199,29 +205,39 @@ const TransactionModal = () => {
               Wallet
             </Typo>
             {/* Dropdown */}
-            <Dropdown
-              style={styles.dropDownContainer}
-              activeColor={colors.neutral700}
-              placeholderStyle={styles.dropdownPlaceholder}
-              selectedTextStyle={styles.dropdownSelectedText}
-              iconStyle={styles.dropdownIcon}
-              // mapp through to get wallets
-              data={wallets.map((wallet) => ({
-                label: `${wallet?.name} ($${wallet.amount})`,
-                value: wallet?.id,
-              }))}
-              maxHeight={300}
-              labelField="label"
-              valueField="value"
-              value={transaction.walletId}
-              onChange={(item) => {
-                setTransaction({ ...transaction, walletId: item.value || "" });
-              }}
-              itemTextStyle={styles.dropDownItemText}
-              itemContainerStyle={styles.dropdownItemContainer}
-              containerStyle={styles.dropdownListContainer}
-              placeholder={"Select Wallet"}
-            />
+            {
+              <Dropdown
+                style={styles.dropDownContainer}
+                activeColor={colors.neutral700}
+                placeholderStyle={styles.dropdownPlaceholder}
+                selectedTextStyle={styles.dropdownSelectedText}
+                iconStyle={styles.dropdownIcon}
+                // mapp through to get wallets
+                data={wallets.map((wallet) => ({
+                  label: `${wallet?.name} ($${wallet.amount})`,
+                  value: wallet?.id,
+                }))}
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                value={transaction.walletId}
+                onChange={(item) => {
+                  setTransaction({
+                    ...transaction,
+                    walletId: item.value || "",
+                  });
+                }}
+                itemTextStyle={styles.dropDownItemText}
+                itemContainerStyle={styles.dropdownItemContainer}
+                containerStyle={styles.dropdownListContainer}
+                placeholder={
+                  wallets && wallets.length > 0
+                    ? "Select Wallet"
+                    : "No wallets created"
+                }
+                disable={!wallets || wallets.length === 0}
+              />
+            }
           </View>
 
           {/* to show expense categories*/}
