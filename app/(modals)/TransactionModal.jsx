@@ -171,7 +171,7 @@ const TransactionModal = () => {
 
         {/* edit form */}
         <ScrollView
-          contentContainerStyle={styles.form}
+          contentContainerStyle={[styles.form, { paddingBottom: 100 }]}
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.inputContainer}>

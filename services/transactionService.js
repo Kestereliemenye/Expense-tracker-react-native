@@ -14,7 +14,7 @@ import {
 import { firestore } from "../config/firebase";
 import { uploadFileToCloudinary } from "./imageServices";
 import { createOrUpdateWallet } from "./walletService";
-import { getLast7days } from "../utils/common";
+import { getLast12Months, getLast7days, getYearRange } from "../utils/common";
 import { colors } from "@/constants/theme";
 import { scale } from "@/utils/styling";
 
@@ -254,7 +254,7 @@ export const deleteTransaction = async (transactionId, walletId) => {
     const newIncomeExpenseAmount = walletData[updateType] - transactionAmount;
 
     // if user tries to delete expense amount and it goes below zero
-    if (transactionType === `expense` || ("income" && newWalletAmount < 0)) {
+    if (transactionType === `expense` &&  newWalletAmount < 0) {
       return { success: false, msg: "You can not delete this transaction" };
     }
     // update wallet
@@ -281,7 +281,7 @@ export const fetchWeeklyStats = async (uid) => {
     sevenDaysAgo.setDate(today.getDate() - 7); // date7 days ago
     const transactionQuery = query(
       collection(db, "transactions"),
-      where("date", "==", Timestamp.fromDate(sevenDaysAgo)),
+      where("date", ">=", Timestamp.fromDate(sevenDaysAgo)),
       where("date", "<=", Timestamp.fromDate(today)), // stop searching at current date
       orderBy("date", "desc"),
       where("uid", "==", uid)
@@ -295,7 +295,7 @@ export const fetchWeeklyStats = async (uid) => {
     querySnapshot.forEach((doc) => {
       const transaction = doc.data(); // get data
       transaction.id = doc.id;
-      transaction.push(transactions);
+      transactions.push(transaction);
 
       const transactionDate = transaction.date
         .toDate()
@@ -327,11 +327,157 @@ export const fetchWeeklyStats = async (uid) => {
     ]);
 
     return {
-      success: true, data: {
-      stats, transactions
-    } };
+      success: true,
+      data: {
+        stats,
+        transactions,
+      },
+    };
   } catch (error) {
     console.log("error fetching weekly stats", error);
+    return { success: false, msg: error.message };
+  }
+};
+
+// get monthly stats
+export const fetchMonthlyStats = async (uid) => {
+  try {
+    const db = firestore;
+    const today = new Date();
+    const twelveMonthsAgo = new Date(today);
+    twelveMonthsAgo.setMonth(today.getMonth() - 12);
+    // define query to fetch transactions in the last 12 months
+    const transactionQuery = query(
+      collection(db, "transactions"),
+      where("date", ">=", Timestamp.fromDate(twelveMonthsAgo)),
+      where("date", "<=", Timestamp.fromDate(today)), // stop searching at current date
+      orderBy("date", "desc"),
+      where("uid", "==", uid)
+    );
+
+    const querySnapshot = await getDocs(transactionQuery);
+    const monthlyData = getLast12Months();
+    const transactions = [];
+
+    // map each transactiion of each day
+    querySnapshot.forEach((doc) => {
+      const transaction = doc.data(); // get data
+      transaction.id = doc.id;
+      transactions.push(transaction);
+
+      const transactionDate = transaction.date.toDate();
+      const monthName = transactionDate.toLocaleString("default", {
+        month: "short",
+      });
+      const shortYear = transactionDate.getFullYear().toString().slice(-2);
+      const monthData = monthlyData.find(
+        (month) => month.month === `${monthName} ${shortYear}`
+      );
+      if (monthData) {
+        if (transaction.type === "income") {
+          monthData.income += transaction.amount;
+        } else if (transaction.type === "expense") {
+          monthData.expense += transaction.amount;
+        }
+      }
+    });
+
+    const stats = monthlyData.flatMap((month) => [
+      {
+        value: month.income,
+        label: month.month,
+        spacing: scale(4),
+        labelWidth: scale(46),
+        frontColor: colors.primary, // income bar color
+      },
+      {
+        value: month.expense,
+        frontColor: colors.rose, // expense bar color
+      },
+    ]);
+
+    return {
+      success: true,
+      data: {
+        stats,
+        transactions,
+      },
+    };
+  } catch (error) {
+    console.log("error fetching Monthly transactions", error);
+    return { success: false, msg: error.message };
+  }
+};
+
+// get yearly stats
+export const fetchYearlyStats = async (uid) => {
+  try {
+    const db = firestore;
+
+    const transactionQuery = query(
+      collection(db, "transactions"),
+      orderBy("date", "desc"),
+      where("uid", "==", uid)
+    );
+
+    const querySnapshot = await getDocs(transactionQuery);
+    const transactions = [];
+
+    // to find first transaction
+    const firstTransaction = querySnapshot.docs.reduce((earliest, doc) => {
+      //look at all the transaction date to get the earliest
+      const transactionDate = doc.data().date.toDate()
+      return transactionDate < earliest ? transactionDate: earliest
+    }, new Date())
+    // first year
+    const firstYear = firstTransaction.getFullYear()
+    const currentYear = new Date().getFullYear()
+
+    const yearlyData = getYearRange(firstYear, currentYear)
+
+    // map each transactiion of each day
+    querySnapshot.forEach((doc) => {
+      const transaction = doc.data(); // get data
+      transaction.id = doc.id;
+      transactions.push(transaction);
+
+      const transactionYear = transaction.date.toDate().getFullYear();
+     
+      const yearData = yearlyData.find(
+        (item) => item.year === transactionYear.toString()
+      );
+      if (yearData) {
+        if (transaction.type === "income") {
+          yearData.income += transaction.amount;
+        } else if (transaction.type === "expense") {
+          yearData.expense += transaction.amount;
+        }
+      }
+    });
+
+    const stats = yearlyData.flatMap((year) => [
+      {
+        value: year.income,
+        label: year.year,
+        spacing: scale(4),
+        labelWidth: scale(35),
+        frontColor: colors.primary, // income bar color
+      },
+      {
+        value: year.expense,
+        frontColor: colors.rose, // expense bar color
+      },
+    ]);
+
+    return {
+      success: true,
+      data: {
+        stats,
+        transactions,
+      },
+    };
+  } catch (error) {
+    console.log("error fetching yearly transactions", error);
     return { success: false, msg: error.message };
   }
 };
