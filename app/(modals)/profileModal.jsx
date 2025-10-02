@@ -35,20 +35,24 @@ const ProfileModal = () => {
 
 
   // to pick image
-  const pickImage = async () => {
+const pickImage = async () => {
+  try {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
-      // allowsEditing: true,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       aspect: [4, 3],
-      quality: 0.5
-    })
-
+      quality: 0.5,
+      allowsEditing:true,
+    });
 
     if (!result.canceled) {
-      setUserData({...userData, image: result.assets[0]})
+      setUserData({ ...userData, image: result.assets[0].uri });
     }
-    
+  } catch (err) {
+    console.log("ImagePicker error:", err);
+    Alert.alert("Error", "Could not open image library");
   }
+};
+
 
   const submit = async () => {
     let { name, image } = userData;
@@ -88,10 +92,15 @@ const ProfileModal = () => {
           <View style={styles.avatarContainer}>
             <Image
               style={styles.avatar}
-              source={getProfileImage(userData.image)}
+              source={
+                userData.image
+                  ? { uri: getProfileImage(userData.image) }
+                  : require("../../assets/images/defaultAvatar.png")
+              }
               contentFit="cover"
               transition={100}
             />
+
             {/* edit icon btn */}
             <TouchableOpacity onPress={pickImage} style={styles.editIcon}>
               <Icons.Pencil

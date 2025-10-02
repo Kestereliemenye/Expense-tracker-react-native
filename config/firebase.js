@@ -6,9 +6,12 @@ import { initializeApp } from "firebase/app";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 // to create auth service
-import { initializeAuth, getReactNativePersistence } from "firebase/auth"
-import AsyncStorage from "@react-native-async-storage/async-storage"
-import {getFirestore} from "firebase/firestore"
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  getReactNativePersistence,
+  initializeAuth,
+} from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 const firebaseConfig = {
   apiKey: "AIzaSyAe6DDLPJ_GMAMGZrEOXYbDrjrEfijJeTc",
   authDomain: "expense-tracker-fe301.firebaseapp.com",
@@ -23,8 +26,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 export const auth = initializeAuth(app, {
-    persistence: getReactNativePersistence(AsyncStorage),
+  persistence: getReactNativePersistence(AsyncStorage),
 });
 
-export const firestore = getFirestore(app)
-
+export const firestore = getFirestore(app);

@@ -1,10 +1,16 @@
 import { collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, where, writeBatch } from "firebase/firestore";
 import { uploadFileToCloudinary } from "./imageServices";
-import { firestore } from "../config/firebase";
+import { firestore, auth } from "../config/firebase";
 
 export const createOrUpdateWallet = async (walletData) => {
   try {
     let walletToSave = { ...walletData };
+
+       const currentUser = auth.currentUser;
+       if (!currentUser) {
+         return { success: false, msg: "Not authenticated" };
+       }
+       walletToSave.uid = currentUser.uid;
 
     // handle image upload
     if (walletData.image) {

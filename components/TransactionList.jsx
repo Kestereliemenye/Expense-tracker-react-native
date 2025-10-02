@@ -15,7 +15,7 @@ const TransactionList = ({ data, title, loading, emptyListMessage }) => {
   const handleClick = (item) => {
     // open transaction details in modal
     router.push({
-      pathname: "/(modals)/TransactionModal",
+      pathname: "/(modals)/transactionModal",
       params: {
         id: item?.id,
         type: item?.type,
