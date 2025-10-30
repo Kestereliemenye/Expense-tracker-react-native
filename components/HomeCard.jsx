@@ -7,18 +7,22 @@ import * as Icons from "phosphor-react-native";
 import { useAuth } from "../context/authContext";
 import useFetchedData from "../hooks/useFetchedData";
 import { orderBy, where } from "firebase/firestore";
+import {  auth } from "../config/firebase";
 
 const HomeCard = () => {
   const { user } = useAuth();
+
   const {
     data: wallets,
     error,
     loading: walletLoading,
   } = useFetchedData("wallets", [
-    where("uid", "==", user?.uid),
     orderBy("created", "desc"), // order the wallet by creation date from current to oldest
+    true
   ]);
-
+  if (!user) {
+  return <Text>Not authenticated</Text>;
+}
   const getTotals = () => {
     return wallets.reduce(
       (totals, item) => {

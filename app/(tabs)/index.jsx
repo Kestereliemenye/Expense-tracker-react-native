@@ -80,7 +80,7 @@ const Home = () => {
         </ScrollView>
 
         {/* floating button */}
-        <Button style={styles.floatingButton} onPress={() => router.push("/(modals)/TransactionModal")}>
+        <Button style={styles.floatingButton} onPress={() => router.push("/(modals)/transactionModal")}>
           <Icons.Plus
             color={colors.black}
             weight="bold"

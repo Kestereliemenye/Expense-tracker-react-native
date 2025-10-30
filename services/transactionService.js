@@ -11,7 +11,7 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { firestore } from "../config/firebase";
+import { firestore, auth } from "../config/firebase";
 import { uploadFileToCloudinary } from "./imageServices";
 import { createOrUpdateWallet } from "./walletService";
 import { getLast12Months, getLast7days, getYearRange } from "../utils/common";
@@ -24,6 +24,13 @@ export const createOrUpdateTransaction = async (transactionData) => {
     if (!amount || amount <= 0 || !walletId || !type) {
       return { success: false, msg: "Invalid transaction data!" };
     }
+
+    // inject uid here always
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      return { success: false, msg: "Not authenticated" };
+    }
+    transactionData.uid = currentUser.uid; // 🔑 add uid
     // To update a transaction
     if (id) {
       //  upddate existing transaction

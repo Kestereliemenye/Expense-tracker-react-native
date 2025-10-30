@@ -1,9 +1,7 @@
-import { View, Platform, TouchableOpacity, StyleSheet } from "react-native";
-import { Text, PlatformPressable } from "@react-navigation/elements";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { colors, spacingX, spacingY } from "@/constants/theme";
+import { colors, spacingY } from "@/constants/theme";
 import { verticalScale } from "@/utils/styling";
 import * as Icons from "phosphor-react-native";
+import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
 
 export default function CustomTabs({ state, descriptors, navigation }) {
   const tabbarIcons = {
@@ -91,14 +89,22 @@ const styles = StyleSheet.create({
   tabar: {
     flexDirection: "row",
     width: "100%",
+<<<<<<< HEAD
     height: Platform.OS === "ios" ? verticalScale(80) : verticalScale(120),
+=======
+    height: Platform.OS === "ios" ? verticalScale(80) : verticalScale(80),
+>>>>>>> 85de852740a6589ecbcbb90ce323dfa94dd73642
     backgroundColor: colors.neutral800,
     justifyContent: "space-around",
     alignItems: "center",
     borderTopColor: colors.neutral700,
   },
   tabBarItem: {
+<<<<<<< HEAD
     marginBottom: Platform.OS === "ios" ? spacingY._30 : spacingY._40,
+=======
+    marginBottom: Platform.OS === "ios" ? spacingY._30 : spacingY._10,
+>>>>>>> 85de852740a6589ecbcbb90ce323dfa94dd73642
     justifyContent: "center",
     alignItems: "center",
   },
