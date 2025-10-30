@@ -1,11 +1,8 @@
-<<<<<<< HEAD
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-=======
->>>>>>> 85de852740a6589ecbcbb90ce323dfa94dd73642
 import ScreenWrapper from "@/components/ScreenWrapper";
+import { colors, spacingX, spacingY, radius } from "@/constants/theme";
 import Typo from "@/components/Typo";
-<<<<<<< HEAD
 import Button from "@/components/Button";
 import { verticalScale } from "@/utils/styling";
 import Header from "../../components/header";
@@ -16,27 +13,10 @@ import { getProfileImage } from "../../services/imageServices";
 import * as Icons from "phosphor-react-native";
 // import Animated, { FadeInDown } from "react-native-reanimated"
 import { signOut } from "firebase/auth";
-=======
->>>>>>> 85de852740a6589ecbcbb90ce323dfa94dd73642
 import { auth } from "@/config/firebase";
-import { colors, radius, spacingX, spacingY } from "@/constants/theme";
-import { verticalScale } from "@/utils/styling";
-import { Image } from "expo-image";
 import { useRouter } from "expo-router";
-<<<<<<< HEAD
 
 export default function profile() {
-=======
-import { signOut } from "firebase/auth";
-import * as Icons from "phosphor-react-native";
-import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
-import Animated, { FadeInDown } from "react-native-reanimated";
-import Header from "../../components/header";
-import { useAuth } from "../../context/authContext";
-import { getProfileImage } from "../../services/imageServices";
-
-const Profile = () => {
->>>>>>> 85de852740a6589ecbcbb90ce323dfa94dd73642
   const { user } = useAuth();
   const router = useRouter();
   const accountOptions = [
@@ -67,15 +47,7 @@ const Profile = () => {
   ];
   // logout function
   const handleLogout = async () => {
-<<<<<<< HEAD
     await signOut(auth);
-=======
-    try {
-      await signOut(auth);
-    } catch (error) {
-      Alert.alert("Logout Error", error.message);
-    }
->>>>>>> 85de852740a6589ecbcbb90ce323dfa94dd73642
   };
 
   // to show logout alert
@@ -93,10 +65,6 @@ const Profile = () => {
       },
     ]);
   };
-<<<<<<< HEAD
-=======
-
->>>>>>> 85de852740a6589ecbcbb90ce323dfa94dd73642
   // Handle press function
   const handlePress = (item) => {
     // console.log(`i clicked ${item.title} button`);
@@ -107,10 +75,7 @@ const Profile = () => {
     if (item.routeName) router.push(item.routeName);
     // console.log(item.routeName);
   };
-<<<<<<< HEAD
 
-=======
->>>>>>> 85de852740a6589ecbcbb90ce323dfa94dd73642
   return (
     <ScreenWrapper>
       <View style={styles.container}>
@@ -121,20 +86,12 @@ const Profile = () => {
         <View style={styles.userInfo}>
           <View style={styles.avatarContainer}>
             {/* user image */}
-<<<<<<< HEAD
             {/* <Image
-=======
-            <Image
->>>>>>> 85de852740a6589ecbcbb90ce323dfa94dd73642
               source={getProfileImage(user?.image)}
               style={styles.avatar}
               contentFit="cover"
               transition={100}
-<<<<<<< HEAD
             /> */}
-=======
-            />
->>>>>>> 85de852740a6589ecbcbb90ce323dfa94dd73642
           </View>
           {/* Name and email */}
           <View style={styles.nameContainer}>
@@ -150,15 +107,7 @@ const Profile = () => {
         <View style={styles.accountOptions}>
           {accountOptions.map((item, index) => {
             return (
-<<<<<<< HEAD
               <View key={index.toString()} style={styles.listItem}>
-=======
-              <Animated.View
-                key={index.toString()}
-                entering={FadeInDown}
-                style={styles.listItem}
-              >
->>>>>>> 85de852740a6589ecbcbb90ce323dfa94dd73642
                 <TouchableOpacity
                   onPress={() => handlePress(item)}
                   style={styles.flexRow}
@@ -181,11 +130,7 @@ const Profile = () => {
                     color={colors.white}
                   />
                 </TouchableOpacity>
-<<<<<<< HEAD
               </View>
-=======
-              </Animated.View>
->>>>>>> 85de852740a6589ecbcbb90ce323dfa94dd73642
             );
           })}
         </View>

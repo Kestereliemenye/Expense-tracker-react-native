@@ -45,10 +45,8 @@ const ProfileModal = () => {
     typeof rawAvatar === "string" ? { uri: rawAvatar } : rawAvatar;
 
   // to pick image
-const pickImage = async () => {
-  try {
+  const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-<<<<<<< HEAD
       mediaTypes: ["images"],
       // allowsEditing: true,
       aspect: [4, 3],
@@ -59,23 +57,6 @@ const pickImage = async () => {
       setUserData({ ...userData, image: result.assets[0] });
     }
   };
-=======
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      aspect: [4, 3],
-      quality: 0.5,
-      allowsEditing:true,
-    });
-
-    if (!result.canceled) {
-      setUserData({ ...userData, image: result.assets[0].uri });
-    }
-  } catch (err) {
-    console.log("ImagePicker error:", err);
-    Alert.alert("Error", "Could not open image library");
-  }
-};
-
->>>>>>> 85de852740a6589ecbcbb90ce323dfa94dd73642
 
   const submit = async () => {
     let { name, image } = userData;
@@ -109,7 +90,6 @@ const pickImage = async () => {
         <ScrollView contentContainerStyle={styles.form}>
           {/* avatar container */}
           <View style={styles.avatarContainer}>
-<<<<<<< HEAD
             {avatarSource ? (
               <Image
                 source={avatarSource}
@@ -119,19 +99,6 @@ const pickImage = async () => {
             ) : (
               <View style={styles.avatar} />
             )}
-=======
-            <Image
-              style={styles.avatar}
-              source={
-                userData.image
-                  ? { uri: getProfileImage(userData.image) }
-                  : require("../../assets/images/defaultAvatar.png")
-              }
-              contentFit="cover"
-              transition={100}
-            />
-
->>>>>>> 85de852740a6589ecbcbb90ce323dfa94dd73642
             {/* edit icon btn */}
             <TouchableOpacity onPress={pickImage} style={styles.editIcon}>
               <Icons.Pencil
