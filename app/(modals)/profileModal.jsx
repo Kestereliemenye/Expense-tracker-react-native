@@ -1,77 +1,81 @@
-import { Alert, ScrollView, StyleSheet,  TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Image,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { colors, spacingX, spacingY, radius } from "@/constants/theme";
 import { verticalScale, scale } from "@/utils/styling";
 import ModalWrapper from "@/components/ModalWrapper";
 import Header from "../../components/header";
 import BackBtn from "../../components/BackBtn";
-import {Image} from "expo-image";
-import {getProfileImage}  from "../../services/imageServices";
-import *as Icons from "phosphor-react-native"
+import { getProfileImage } from "../../services/imageServices";
+import * as Icons from "phosphor-react-native";
 import Typo from "../../components/Typo";
-import Input from "../../components/input"
-import Button from "../../components/Button"
+import Input from "../../components/input";
+import Button from "../../components/Button";
 import { useAuth } from "../../context/authContext";
 import { updateUser } from "../../services/userService";
 import { useRouter } from "expo-router";
-import * as ImagePicker from "expo-image-picker"
+import * as ImagePicker from "expo-image-picker";
 
 const ProfileModal = () => {
-  const { user , updateUserData} = useAuth();
-  const [userData, setUserData ] = useState({
+  const { user, updateUserData } = useAuth();
+  const [userData, setUserData] = useState({
     name: "",
-    image: null
-  })
-  const [loading, setLoading] = useState(false)
-  const router = useRouter()
+    image: null,
+  });
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   // fills the name and image with data fromd ata base wehn the modal opens
   useEffect(() => {
     setUserData({
       name: user?.name || "",
-      image: user?.image || null
-    })
-  }, [])
+      image: user?.image || null,
+    });
+  }, []);
 
+  // prepare image source safely for RN Image
+  const rawAvatar = getProfileImage(userData.image);
+  const avatarSource =
+    typeof rawAvatar === "string" ? { uri: rawAvatar } : rawAvatar;
 
   // to pick image
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
+      mediaTypes: ["images"],
       // allowsEditing: true,
       aspect: [4, 3],
-      quality: 0.5
-    })
-
+      quality: 0.5,
+    });
 
     if (!result.canceled) {
-      setUserData({...userData, image: result.assets[0]})
+      setUserData({ ...userData, image: result.assets[0] });
     }
-    
-  }
+  };
 
   const submit = async () => {
     let { name, image } = userData;
     if (!name.trim()) {
-      Alert.alert("User", "Please fill all the fields")
+      Alert.alert("User", "Please fill all the fields");
       return;
     }
-    setLoading(true)
+    setLoading(true);
     // console.log("goood to go");
-    const res = await updateUser(user?.uid, userData)
+    const res = await updateUser(user?.uid, userData);
     setLoading(false);
     if (res.success) {
       /// updateUser
-      updateUserData(user?.uid)
-      router.back()
+      updateUserData(user?.uid);
+      router.back();
     } else {
-      Alert.alert("User", res.msg)
+      Alert.alert("User", res.msg);
     }
-    
-    
-  }
-
-
+  };
 
   return (
     <ModalWrapper>
@@ -86,12 +90,15 @@ const ProfileModal = () => {
         <ScrollView contentContainerStyle={styles.form}>
           {/* avatar container */}
           <View style={styles.avatarContainer}>
-            <Image
-              style={styles.avatar}
-              source={getProfileImage(userData.image)}
-              contentFit="cover"
-              transition={100}
-            />
+            {avatarSource ? (
+              <Image
+                source={avatarSource}
+                style={styles.avatar}
+                resizeMode="cover"
+              />
+            ) : (
+              <View style={styles.avatar} />
+            )}
             {/* edit icon btn */}
             <TouchableOpacity onPress={pickImage} style={styles.editIcon}>
               <Icons.Pencil

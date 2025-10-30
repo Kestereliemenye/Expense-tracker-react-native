@@ -1,4 +1,4 @@
-import {  Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import ScreenWrapper from "@/components/ScreenWrapper";
 import { colors, spacingX, spacingY, radius } from "@/constants/theme";
@@ -8,18 +8,17 @@ import { verticalScale } from "@/utils/styling";
 import Header from "../../components/header";
 import BackBtn from "@/components/BackBtn";
 import { useAuth } from "../../context/authContext";
-import { Image } from "expo-image"
+import { Image } from "expo-image";
 import { getProfileImage } from "../../services/imageServices";
-import * as Icons from "phosphor-react-native"
-import Animated, { FadeInDown } from "react-native-reanimated"
-import { signOut } from 'firebase/auth';
+import * as Icons from "phosphor-react-native";
+// import Animated, { FadeInDown } from "react-native-reanimated"
+import { signOut } from "firebase/auth";
 import { auth } from "@/config/firebase";
 import { useRouter } from "expo-router";
 
-
-const Profile = () => {
+export default function profile() {
   const { user } = useAuth();
-  const router = useRouter()
+  const router = useRouter();
   const accountOptions = [
     {
       title: "Edit Profile",
@@ -44,104 +43,101 @@ const Profile = () => {
       icon: <Icons.Power size={26} color={colors.white} weight="fill" />,
       // routeName: "/(models/profileModel)",
       bgColor: "#e11d48",
-    }
+    },
   ];
-
   // logout function
   const handleLogout = async () => {
-      await signOut(auth)
-    }
+    await signOut(auth);
+  };
 
   // to show logout alert
   const showLogoutAlert = () => {
     Alert.alert("Confirm", "Are you sure you want to logout?", [
       {
-      text: "Cancel",
-      onPress: () => console.log("cancel logout"),
-      style: "cancel"
-      
-    },
+        text: "Cancel",
+        onPress: () => console.log("cancel logout"),
+        style: "cancel",
+      },
       {
         text: "Logout",
         onPress: () => handleLogout(),
-        style: "destructive"
-      }
-    ])
-  }
-
-
+        style: "destructive",
+      },
+    ]);
+  };
   // Handle press function
   const handlePress = (item) => {
     // console.log(`i clicked ${item.title} button`);
-    
+
     if (item.title === "Logout") {
-      showLogoutAlert()
+      showLogoutAlert();
     }
-    if (item.routeName) router.push(item.routeName)
+    if (item.routeName) router.push(item.routeName);
     // console.log(item.routeName);
-    
- 
-  }
+  };
+
   return (
     <ScreenWrapper>
       <View style={styles.container}>
         {/* header */}
-        <Header title="Profile" style={{ marginVertical: spacingY._10 }} />
+        <Header title="Profile" />
 
         {/* user info */}
         <View style={styles.userInfo}>
-          {/* Avatar */}
-          <View>
+          <View style={styles.avatarContainer}>
             {/* user image */}
-            <Image source={getProfileImage(user?.image)} style={styles.avatar} contentFit="cover" transition={100}/>
-            
+            {/* <Image
+              source={getProfileImage(user?.image)}
+              style={styles.avatar}
+              contentFit="cover"
+              transition={100}
+            /> */}
           </View>
           {/* Name and email */}
           <View style={styles.nameContainer}>
             <Typo size={24} fontWeight={"600"} color={colors.neutral100}>
               {user?.name}
             </Typo>
-            <Typo size={15}  color={colors.neutral400}>
+            <Typo size={15} color={colors.neutral400}>
               {user?.email}
             </Typo>
           </View>
         </View>
         {/* account options */}
         <View style={styles.accountOptions}>
-          {
-            accountOptions.map((item, index) => {
-              return (
-                <Animated.View
-                  key={index.toString()}
-                  entering={FadeInDown.delay(index * 50)
-                    .springify(14).damping(14)}
-                  style={styles.listItem}>
-                  <TouchableOpacity
-                    onPress={()=>handlePress(item)}
-                    style={styles.flexRow}>
-                    {/* icon */}
-                    <View style={[styles.listIcon, { backgroundColor: item?.bgColor }]}>
-                      
-                      {item.icon && item.icon}
-                    </View>
-                    <Typo size={16} style={{ flex: 1 }} fontWeight={"500"}>{item?.title}</Typo>
-                    <Icons.CaretRight
+          {accountOptions.map((item, index) => {
+            return (
+              <View key={index.toString()} style={styles.listItem}>
+                <TouchableOpacity
+                  onPress={() => handlePress(item)}
+                  style={styles.flexRow}
+                >
+                  {/* icon */}
+                  <View
+                    style={[
+                      styles.listIcon,
+                      { backgroundColor: item?.bgColor },
+                    ]}
+                  >
+                    {item.icon && item.icon}
+                  </View>
+                  <Typo size={16} style={{ flex: 1 }} fontWeight={"500"}>
+                    {item?.title}
+                  </Typo>
+                  <Icons.CaretRight
                     size={verticalScale(20)}
                     weight="bold"
-                    color={colors.white}/>
-                  </TouchableOpacity>
-                </Animated.View>
-              );
-            })
-          }
+                    color={colors.white}
+                  />
+                </TouchableOpacity>
+              </View>
+            );
+          })}
         </View>
       </View>
     </ScreenWrapper>
   );
-};
-
-export default Profile;
-
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -185,7 +181,7 @@ const styles = StyleSheet.create({
     width: verticalScale(44),
     backgroundColor: colors.neutral500,
     justifyContent: "center",
-    alignItems:"center",
+    alignItems: "center",
     borderRadius: radius._15,
     borderCurve: "continuous",
   },
@@ -201,3 +197,4 @@ const styles = StyleSheet.create({
     gap: spacingY._10,
   },
 });
+

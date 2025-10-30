@@ -3,14 +3,14 @@ import React, { useEffect } from "react";
 import { colors } from "@/constants/theme";
 import { useRouter } from "expo-router";
 
-export default function index() {
+export default function Index() {
   // to make the splash page redirect
-  // const router = useRouter();
-  //   useEffect(() => {
-  //       setTimeout(() => {
-  //         router.push("./(auth)/welcome")
-  //     },2000)
-  // }, []);
+  const router = useRouter();
+  useEffect(() => {
+    setTimeout(() => {
+      router.push("./(auth)/welcome");
+    }, 2000);
+  }, []);
 
   return (
     <View style={styles.container}>
