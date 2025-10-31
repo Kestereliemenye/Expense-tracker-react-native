@@ -14,7 +14,7 @@ import ScreenWrapper from "@/components/ScreenWrapper";
 import Typo from "@/components/Typo";
 import { colors, spacingX, spacingY } from "@/constants/theme";
 import { verticalScale } from "@/utils/styling";
-import BackBtn from "@/components/BackBtn";
+import LoginSigninBackBtn from "../../components/LoginSigninBackBtn";
 import Input from "@/components/input";
 import Button from "@/components/Button";
 import * as Icons from "phosphor-react-native";
@@ -58,7 +58,7 @@ const Register = () => {
           showsVerticalScrollIndicator={false}
         >
           {/* back button */}
-          <BackBtn iconSize={28} />
+          <LoginSigninBackBtn iconSize={28} />
           <View style={{ gap: 5, marginTop: spacingY._20 }}>
             <Typo size={30} fontWeight={"800"}>
               Let`s

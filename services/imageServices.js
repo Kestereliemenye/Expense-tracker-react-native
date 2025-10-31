@@ -39,15 +39,13 @@ export const uploadFileToCloudinary = async (file, folderName) => {
     return { success: false, msg: error.msg || "could not uplaod file" };
   }
 };
-
 export const getProfileImage = (file) => {
-  if (file && typeof file == "string") {
+  if (file && typeof file === "string" && file.trim() !== "") {
     return { uri: file };
   }
-  if (file && typeof file == "object" && file.uri) {
+  if (file && typeof file === "object" && file.uri && file.uri.trim() !== "") {
     return { uri: file.uri };
   }
-
   return require("../assets/images/defaultAvatar.png");
 };
 export const getFilePath = (file) => {

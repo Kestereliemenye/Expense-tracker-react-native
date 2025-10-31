@@ -86,12 +86,12 @@ export default function profile() {
         <View style={styles.userInfo}>
           <View style={styles.avatarContainer}>
             {/* user image */}
-            {/* <Image
+            <Image
               source={getProfileImage(user?.image)}
               style={styles.avatar}
               contentFit="cover"
               transition={100}
-            /> */}
+            />
           </View>
           {/* Name and email */}
           <View style={styles.nameContainer}>

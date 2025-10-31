@@ -3,54 +3,60 @@ import React, { useEffect, useState } from "react";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { firestore, auth } from "../config/firebase";
 
-const useFetchedData = (collectionName, constraints = [], withUserFilter = true ) => {
+const useFetchedData = (
+  collectionName,
+  constraints = [],
+  withUserFilter = true
+) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null)
-    
+  const [error, setError] = useState(null);
 
-    useEffect(() => {
-      if (!collectionName) return;
-      const currentUser = auth.currentUser;
-      if (!currentUser && withUserFilter) {
-        setData([]);
-        setLoading(false);
-        return;
-      }
+  useEffect(() => {
+    if (!collectionName) return;
+    const currentUser = auth.currentUser;
+    if (withUserFilter && !currentUser) {
+      setData([]);
+      setLoading(false);
+      return;
+    }
+    let q;
+    try {
       const collectionRef = collection(firestore, collectionName);
-      // ✅ auto-attach uid filter unless disabled
-      const q = withUserFilter
+      q = withUserFilter
         ? query(
             collectionRef,
             where("uid", "==", currentUser.uid),
             ...constraints
           )
         : query(collectionRef, ...constraints);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+      return;
+    }
 
-      const unsub = onSnapshot(
-        q,
-        (snapshot) => {
-          const fecthedData = snapshot.docs.map((doc) => {
-            return {
-              id: doc.id,
-              ...doc.data(),
-            };
-          });
+    const unsub = onSnapshot(
+      q,
+      (snapshot) => {
+        const fetchedData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setData(fetchedData);
+        setLoading(false);
+      },
+      (err) => {
+        console.log("Error fetching Data:", err);
+        setError(err.message);
+        setLoading(false);
+      }
+    );
+    return () => unsub();
+  }, [collectionName, constraints, withUserFilter]);
 
-          setData(fecthedData);
-          setLoading(false);
-        },
-        (err) => {
-          console.log("Erro fetching Data:", err);
-          setError(err.message);
-          setLoading(false);
-        }
-      );
-      return () => unsub();
-    }, [collectionName, constraints, withUserFilter]);
-  return ( {data,loading,error});
+  return { data, loading, error };
 };
-
 
 export default useFetchedData;
 
