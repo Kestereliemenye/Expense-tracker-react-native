@@ -1,4 +1,4 @@
-  import { ImageBackground, StyleSheet, Text, View } from "react-native";
+import { ImageBackground, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import Typo from "./Typo";
 import { verticalScale, scale } from "@/utils/styling";
@@ -7,7 +7,7 @@ import * as Icons from "phosphor-react-native";
 import { useAuth } from "../context/authContext";
 import useFetchedData from "../hooks/useFetchedData";
 import { orderBy, where } from "firebase/firestore";
-import {  auth } from "../config/firebase";
+import { auth } from "../config/firebase";
 
 const HomeCard = () => {
   const { user } = useAuth();
@@ -18,12 +18,16 @@ const HomeCard = () => {
     loading: walletLoading,
   } = useFetchedData("wallets", [
     orderBy("created", "desc"), // order the wallet by creation date from current to oldest
-    true
   ]);
+  // Debug log for wallets, loading state, and totals
+  // console.log("HomeCard wallets:", wallets);
+  // console.log("HomeCard walletLoading:", walletLoading);
   if (!user) {
-  return <Text>Not authenticated</Text>;
-}
+    return <Text>Not authenticated</Text>;
+  }
   const getTotals = () => {
+    if (!wallets || !Array.isArray(wallets) || wallets.length === 0)
+      return { balance: 0, income: 0, expenses: 0 };
     return wallets.reduce(
       (totals, item) => {
         totals.balance = totals.balance + Number(item.amount);
@@ -34,6 +38,8 @@ const HomeCard = () => {
       { balance: 0, income: 0, expenses: 0 }
     );
   };
+  // Log the totals after calculation
+  // console.log("HomeCard getTotals:", getTotals());
 
   return (
     <ImageBackground

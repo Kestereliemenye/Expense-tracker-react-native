@@ -45,7 +45,7 @@ export const createOrUpdateWallet = async (walletData) => {
     await setDoc(walletRef, walletToSave, { merge: true }); // updates only the data provide
     return { success: true, data: { ...walletToSave, id: walletRef.id } };
   } catch (error) {
-    console.log("error creating or updating the waller", error);
+    console.log("error creating or updating the wallet", error);
     return { success: false, msg: error.message };
   }
 };

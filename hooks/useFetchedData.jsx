@@ -15,6 +15,7 @@ const useFetchedData = (
   useEffect(() => {
     if (!collectionName) return;
     const currentUser = auth.currentUser;
+    // console.log("[useFetchedData] currentUser:", currentUser);
     if (withUserFilter && !currentUser) {
       setData([]);
       setLoading(false);
@@ -30,24 +31,31 @@ const useFetchedData = (
             ...constraints
           )
         : query(collectionRef, ...constraints);
+      // console.log("[useFetchedData] Query:", q);
     } catch (err) {
       setError(err.message);
       setLoading(false);
-      return;
+      console.log("[useFetchedData] Query error:", err);
+      // return;
     }
 
     const unsub = onSnapshot(
       q,
       (snapshot) => {
-        const fetchedData = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
+        // console.log("[useFetchedData] Snapshot size:", snapshot.size);
+        const fetchedData = snapshot.docs.map((doc) => {
+          const docData = doc.data();
+          // console.log("[useFetchedData] Doc:", doc.id, docData);
+          return {
+            id: doc.id,
+            ...docData,
+          };
+        });
         setData(fetchedData);
         setLoading(false);
       },
       (err) => {
-        console.log("Error fetching Data:", err);
+        console.log("[useFetchedData] Error fetching Data:", err);
         setError(err.message);
         setLoading(false);
       }

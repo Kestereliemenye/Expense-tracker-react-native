@@ -15,9 +15,9 @@ export const uploadFileToCloudinary = async (file, folderName) => {
     if (file && file.uri) {
       const formData = new FormData();
       formData.append("file", {
-        uri: file?.uri,
-        type: file.type || "image/jpeg",
-        name: file?.uri?.split("/").pop() || "file.jpg",
+        uri: file.uri,
+        type: file.mimeType || "image/jpeg",
+        name: file.fileName || file.uri.split("/").pop() || "file.jpg",
       });
       formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
       formData.append("folder", folderName);
@@ -28,14 +28,17 @@ export const uploadFileToCloudinary = async (file, folderName) => {
           "Content-Type": "multipart/form-data",
         },
       });
-
+      
       // once file uploads
       return { success: true, data: response?.data?.secure_url };
     }
-
+    
     return { success: true };
   } catch (error) {
+    console.log("Using upload preset:", CLOUDINARY_UPLOAD_PRESET);
     console.log("got error uploading file", error);
+    console.log("Full error:", error, error?.response?.data);
+    // console.log("Uploading file to Cloudinary:", file);
     return { success: false, msg: error.msg || "could not uplaod file" };
   }
 };
