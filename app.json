@@ -38,6 +38,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "d34e63f4-4abe-433d-99df-1e54f87edff9"
+      }
+    },
+    "owner": "kestereli"
   }
 }

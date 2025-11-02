@@ -11,7 +11,7 @@ import { useAuth } from "../../context/authContext";
 import { Image } from "expo-image";
 import { getProfileImage } from "../../services/imageServices";
 import * as Icons from "phosphor-react-native";
-// import Animated, { FadeInDown } from "react-native-reanimated"
+import Animated, { FadeInDown } from "react-native-reanimated"
 import { signOut } from "firebase/auth";
 import { auth } from "@/config/firebase";
 import { useRouter } from "expo-router";
@@ -104,10 +104,14 @@ export default function profile() {
           </View>
         </View>
         {/* account options */}
-        <View style={styles.accountOptions}>
+        <View style={styles.accountOptions} >
           {accountOptions.map((item, index) => {
             return (
-              <View key={index.toString()} style={styles.listItem}>
+              <Animated.View
+                 entering={FadeInDown.delay(index * 70)
+                .springify()
+                .damping(14)}
+                key={index.toString()} style={styles.listItem}>
                 <TouchableOpacity
                   onPress={() => handlePress(item)}
                   style={styles.flexRow}
@@ -130,7 +134,7 @@ export default function profile() {
                     color={colors.white}
                   />
                 </TouchableOpacity>
-              </View>
+              </Animated.View>
             );
           })}
         </View>
