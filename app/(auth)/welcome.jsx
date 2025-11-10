@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Image, InteractionManager } from 'react-native'
 import React from 'react'
 import ScreenWrapper from "@/components/ScreenWrapper"
 import Typo from "@/components/Typo"
@@ -11,13 +11,18 @@ import {useRouter} from "expo-router"
 
 const Welcome = () => {
   const router = useRouter();
+  const goToLogin = () => {
+    InteractionManager.runAfterInteractions(() => {
+      router.replace("/login");
+    });
+  };
   return (
     <ScreenWrapper>
       <View style={styles.container}>
         {/* LOGIN BUTTON */}
         <View>
           <TouchableOpacity
-            onPress={() => router.replace("/(auth)/login")}
+            onPress={goToLogin}
             style={styles.loginButton}
           >
             <Typo fontweight={"500"}>Sign in</Typo>
@@ -61,7 +66,7 @@ const Welcome = () => {
               .damping(12)}
             style={styles.buttonContainer}
           >
-            <Button onPress={() => router.replace("/(auth)/register")}>
+            <Button onPress={() => router.replace("/register")}>
               <Typo size={22} color={colors.neutral900} fontweight={"600"}>
                 Get started
               </Typo>
