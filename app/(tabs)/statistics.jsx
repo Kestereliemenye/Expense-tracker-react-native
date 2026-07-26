@@ -1,5 +1,6 @@
 import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import ScreenWrapper from "@/components/ScreenWrapper";
 import Typo from "@/components/Typo";
 import { colors, spacingX, spacingY, radius } from "@/constants/theme";
@@ -24,17 +25,32 @@ const Statistics = () => {
   const [chartTransactions, setChartTransactions] = useState([]);
   const [chartLoading, setChartLoading] = useState(false);
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   if (activeIndex === 0) {
+  //     getWeeklyStats();
+  //   }
+  //   if (activeIndex === 1) {
+  //     getMonthlyStats();
+  //   }
+  //   if (activeIndex === 2) {
+  //     getYearlyStats();
+  //   }
+  // }, [activeIndex]);
+useFocusEffect(
+  useCallback(() => {
+    loadStats();
+  }, [activeIndex, user?.uid]),
+);
+
+  const loadStats = async () => {
     if (activeIndex === 0) {
-      getWeeklyStats();
+      await getWeeklyStats();
+    } else if (activeIndex === 1) {
+      await getMonthlyStats();
+    } else {
+      await getYearlyStats();
     }
-    if (activeIndex === 1) {
-      getMonthlyStats();
-    }
-    if (activeIndex === 2) {
-      getYearlyStats();
-    }
-  }, [activeIndex]);
+  };
 
   const getWeeklyStats = async () => {
     // get weekly stats

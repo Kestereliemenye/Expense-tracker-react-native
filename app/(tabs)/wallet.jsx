@@ -17,9 +17,10 @@ import WalletListItem from '../../components/WalletListItem';
 const Wallet = () => {
   const router = useRouter()
   const { user } = useAuth()
+  // console.log("AuthContext user:", user);
   
   const { data: wallets, error, loading } = useFetchedData("wallets", [
-    where("uid", "==", user?.uid),
+    // where("uid", "==", user?.uid),
     orderBy("created", "desc")// order the wallet by creation date from current to oldest
   ])
 
@@ -30,7 +31,8 @@ const Wallet = () => {
     wallets.reduce((total, item) => {
       total = total + (item.amount || 0)
       return total
-    },0)
+    }, 0)
+  
   
   return (
     <ScreenWrapper style={{backgroundColor: colors.black}}>

@@ -23,7 +23,7 @@ import { useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 
 const ProfileModal = () => {
-  const { user, updateUserData } = useAuth();
+  const { user } = useAuth();
   const [userData, setUserData] = useState({
     name: "",
     image: null,
@@ -69,9 +69,7 @@ const ProfileModal = () => {
     const res = await updateUser(user?.uid, userData);
     setLoading(false);
     if (res.success) {
-      /// updateUser
-      updateUserData(user?.uid);
-      router.back();
+      router.back()
     } else {
       Alert.alert("User", res.msg);
     }

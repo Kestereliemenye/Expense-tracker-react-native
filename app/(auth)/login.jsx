@@ -1,4 +1,4 @@
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useRef, useState } from 'react'
 import {useRouter} from "expo-router"
 import  ScreenWrapper  from '@/components/ScreenWrapper'
@@ -33,6 +33,7 @@ const Login = () => {
 
   return (
     <ScreenWrapper>
+      <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         {/* back button */}
         <LoginSigninBackBtn iconSize={28}/>
@@ -87,6 +88,8 @@ const Login = () => {
                   </Pressable>
               </View>
       </View>
+
+      </ScrollView>
     </ScreenWrapper>
   );
 }

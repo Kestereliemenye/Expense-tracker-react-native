@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   tabar: {
     flexDirection: "row",
     width: "100%",
-    height: Platform.OS === "ios" ? verticalScale(80) : verticalScale(120),
+    height: Platform.OS === "ios" ? verticalScale(80) : verticalScale(100),
     backgroundColor: colors.neutral800,
     justifyContent: "space-around",
     alignItems: "center",
